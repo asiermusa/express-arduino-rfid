@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Arduino RFID</title>
+
+  <script src="/socket.io/socket.io.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Lacquer&display=swap');
+
+    body {
+      height: 100vh;
+      width: 100%;
+      color: #f1f1f1;
+      font-family: 'Lacquer';
+      text-align: center;
+      background-image: linear-gradient(45deg, #222, #333);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .error {
+      color: #FFF59D;
+      margin: 20px;
+      text-decoration: underline;
+    }
+
+    .access {
+      color: #9CCC65;
+      margin: 20px;
+    }
+
+    .card {
+      padding: 20px;
+      border: 3px solid #E0E0E0;
+      border-radius: 3px;
+      color: #333;
+      width: 200px;
+      text-align: center;
+      display: inline-block;
+      background: #FAFAFA;
+      margin: 5px;
+    }
+
+    @keyframes selected {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.5);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .card-success {
+      border: 3px solid #AED581;
+      background: #7CB342;
+      color: white;
+      animation: selected .3s linear backwards;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Arduino RFID system</h2>
+
+  <h4>Access control to our super secure area</h4>
+
+
+  <div class="card card--zabala">JM Mr Wide</div>
+  <div class="card card--musa">Asiertadi Musarkor</div>
+
+  <div class="error" id="error"></div>
+  <div class="access" id="access"></div>
+
+  <script>
+    var socket = io('http://localhost:5000')
+    socket.on('card', function(card) {
+      console.log(card)
+
+      if (card.data == 4123628229) { //zabala
+        document.querySelector('.card--zabala').classList.add("card-success");
+        document.querySelector('.card--musa').classList.remove("card-success");
+        document.getElementById("access").innerHTML = 'JM you are logged'
+        document.getElementById("error").innerHTML = ''
+        var notification = new Notification("Mr Wide is logged!");
+      } else if (card.data == 183244104123) { //musa
+        document.querySelector('.card--musa').classList.add("card-success");
+        document.querySelector('.card--zabala').classList.remove("card-success");
+        document.getElementById("access").innerHTML = 'Asiertadi you are logged'
+        document.getElementById("error").innerHTML = ''
+        var notification = new Notification("Musarkor is logged!");
+      } else {
+        document.getElementById("error").innerHTML = card.data + ' you are not allowed to enter...'
+        document.querySelector('.card--zabala').classList.remove("card-success");
+        document.querySelector('.card--musa').classList.remove("card-success");
+        document.getElementById("access").innerHTML = ''
+        var notification = new Notification("Somebody is trying to access!");
+      }
+
+    })
+  </script>
+
+</body>
+
+</html>
