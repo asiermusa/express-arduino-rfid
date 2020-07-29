@@ -9,7 +9,7 @@ server.listen(5000, () => {
   console.log('server running on http://localhost:5000')
 })
 
-const SerialName = "/dev/cu.wchusbserial1420"
+const SerialName = "/dev/cu.wchusbserial1410" //1420
 const SerialPort = require('serialport');
 const ReadLine = SerialPort.parsers.Readline;
 
