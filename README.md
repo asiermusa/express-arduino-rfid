@@ -22,3 +22,9 @@ $ npm install
 $ node server.js
 
 ```
+
+### Troubleshooting
+If your mac doesn't detect usb serial port you can try with this:
+https://github.com/adrianmihalko/ch340g-ch34g-ch34x-mac-os-x-driver
+
+Depends on your RFID card you have to add a library to your Arduino IDE (MFRC522.h...)
